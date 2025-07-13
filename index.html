@@ -13,218 +13,236 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #ecf0f9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fb;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #131a2f;
+            color: #4a5568;
         }
 
-        /* Main container */
         .container {
-            background: white;
-            border-radius: 16px;
-            padding: 60px 50px;
             text-align: center;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e8ecf0;
-            max-width: 480px;
-            width: 90%;
-            position: relative;
-        }
-
-        /* Typography */
-        h1 {
-            color: #131a2f;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #64748b;
-            font-size: 16px;
-            margin-bottom: 48px;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        /* Loading animation */
-        .loading {
-            margin-bottom: 40px;
-        }
-
-        .loading-bar {
+            max-width: 400px;
             width: 100%;
-            height: 8px;
-            background: #e8ecf0;
-            border-radius: 4px;
+            padding: 0 20px;
+        }
+
+
+
+        .status {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+            white-space: nowrap;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #64748b;
+            margin-bottom: 60px;
+            line-height: 1.6;
+            white-space: nowrap;
+        }
+
+        .progress-container {
+            margin-bottom: 60px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
             overflow: hidden;
             margin-bottom: 24px;
         }
 
-        .loading-progress {
+        .progress-fill {
             height: 100%;
-            background: #131a2f;
-            border-radius: 4px;
-            animation: loading 3s ease-out;
-            position: relative;
+            background: #141c33;
+            border-radius: 3px;
+            animation: progress 3s ease-out forwards;
         }
 
-        .loading-progress::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: shine 2s ease-in-out infinite;
-        }
-
-        @keyframes loading {
+        @keyframes progress {
             from { width: 0%; }
             to { width: 100%; }
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .loading-text {
-            color: #64748b;
-            font-size: 14px;
+        .progress-text {
+            font-size: 16px;
+            color: #a0aec0;
             font-weight: 500;
+            white-space: nowrap;
         }
 
-        /* Fallback link */
-        .fallback a {
-            color: #131a2f;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 12px 24px;
-            border: 2px solid #131a2f;
-            border-radius: 8px;
+        .manual-link {
             display: inline-block;
-            transition: all 0.2s ease;
+            padding: 12px 24px;
             background: transparent;
+            color: #141c33;
+            text-decoration: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
-        .fallback a:hover {
-            background: #131a2f;
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .fallback a:active {
-            transform: translateY(0);
+        .manual-link:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .container {
-                padding: 40px 30px;
-                margin: 20px;
+                padding: 0 20px;
+                max-width: 100%;
             }
-
-            h1 {
-                font-size: 24px;
+            
+            .status {
+                font-size: 28px;
+                margin-bottom: 14px;
             }
-
-            .subtitle {
+            
+            .message {
+                font-size: 16px;
+                margin-bottom: 50px;
+            }
+            
+            .progress-container {
+                margin-bottom: 50px;
+            }
+            
+            .progress-bar {
+                height: 5px;
+                margin-bottom: 20px;
+            }
+            
+            .progress-text {
                 font-size: 14px;
             }
-
-            .icon {
-                width: 56px;
-                height: 56px;
-                margin-bottom: 24px;
-            }
-
-            .icon svg {
-                width: 24px;
-                height: 24px;
+            
+            .manual-link {
+                padding: 10px 20px;
+                font-size: 14px;
             }
         }
 
-        /* Subtle entrance animation */
-        .container {
-            animation: fadeInUp 0.6s ease-out;
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .status {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+            
+            .message {
+                font-size: 14px;
+                margin-bottom: 40px;
+            }
+            
+            .progress-container {
+                margin-bottom: 40px;
+            }
+            
+            .progress-bar {
+                height: 4px;
+                margin-bottom: 18px;
+            }
+            
+            .progress-text {
+                font-size: 13px;
+            }
+            
+            .manual-link {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        @media (max-width: 320px) {
+            .container {
+                padding: 0 12px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .status {
+                font-size: 20px;
+                margin-bottom: 10px;
             }
-        }
-
-        /* Loading states */
-        .loading-text {
-            transition: opacity 0.3s ease;
+            
+            .message {
+                font-size: 12px;
+                margin-bottom: 35px;
+            }
+            
+            .progress-container {
+                margin-bottom: 35px;
+            }
+            
+            .progress-bar {
+                height: 3px;
+                margin-bottom: 16px;
+            }
+            
+            .progress-text {
+                font-size: 12px;
+            }
+            
+            .manual-link {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Main content -->
     <div class="container">
-        <h1>SHINDUK</h1>
-        <p class="subtitle">Redirecting you to a secure environment</p>
+        <div class="status">Redirecting</div>
+        <div class="message">Please wait while we redirect you to the secure vault</div>
         
-        <div class="loading">
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
-            <div class="loading-text">Establishing secure connection...</div>
+            <div class="progress-text" id="progressText">Connecting...</div>
         </div>
         
-        <div class="fallback">
-            <a href="https://studio--shinduk-secure-vault.us-central1.hosted.app/">
-                Continue Manually
-            </a>
-        </div>
+        <a href="https://studio--shinduk-secure-vault.us-central1.hosted.app/" class="manual-link">
+            Continue manually
+        </a>
     </div>
 
     <script>
-        // Enhanced redirect with user feedback
-        let countdown = 3;
-        const loadingText = document.querySelector('.loading-text');
         const messages = [
-            'Establishing secure connection...',
-            'Verifying security protocols...',
-            'Finalizing redirect...'
+            'Connecting...',
+            'Authenticating...',
+            'Redirecting...'
         ];
-
+        
+        let messageIndex = 0;
+        const progressText = document.getElementById('progressText');
+        
         const updateMessage = () => {
-            if (countdown > 0) {
-                loadingText.textContent = messages[3 - countdown] || 'Redirecting...';
-                countdown--;
+            if (messageIndex < messages.length) {
+                progressText.textContent = messages[messageIndex];
+                messageIndex++;
                 setTimeout(updateMessage, 1000);
-            } else {
-                loadingText.textContent = 'Redirecting now...';
-                // Additional fallback redirect
-                setTimeout(() => {
-                    window.location.href = 'https://studio--shinduk-secure-vault.us-central1.hosted.app/';
-                }, 500);
             }
         };
-
-        // Start countdown
+        
         updateMessage();
-
-        // Add smooth transition when leaving page
-        window.addEventListener('beforeunload', () => {
-            document.body.style.opacity = '0.7';
-        });
+        
+        setTimeout(() => {
+            window.location.href = 'https://studio--shinduk-secure-vault.us-central1.hosted.app/';
+        }, 3000);
     </script>
 </body>
 </html>
