@@ -1,1355 +1,230 @@
-<!-- By Tariqul Islam -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SHINDUK - Offline Password Manager</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <meta http-equiv="refresh" content="3; url=https://studio--shinduk-secure-vault.us-central1.hosted.app/">
+    <title>Redirecting to Secure Vault</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #1d1d1d;
-            --bg-secondary: #2a2a2a;
-            --bg-tertiary: #333333;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #6b6b6b;
-            --accent: #007aff;
-            --accent-hover: #0056cc;
-            --border: #3a3a3a;
-            --border-light: #4a4a4a;
-            --success: #34c759;
-            --warning: #ff9500;
-            --danger: #ff3b30;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.2);
-            --radius: 12px;
-            --radius-small: 8px;
-            --logo-blue: #007aff;
-            --logo-blue-light: #4fc3ff;
-        }
-        html {
-            font-size: 16px;
-        }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .vault-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            min-height: 100vh;
-            width: 100%;
-        }
-        .vault-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-        }
-        .vault-header-logo {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-        .shinduk-logo-anim {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            user-select: none;
-        }
-        .shinduk-logo-text {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, var(--logo-blue) 0%, var(--logo-blue-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-            opacity: 0;
-            animation: logoTextFadeIn 1.2s 0.3s forwards;
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-            text-shadow: 0 2px 8px rgba(0, 122, 255, 0.10);
-            line-height: 1;
-        }
-        @keyframes logoTextFadeIn {
-            from { opacity: 0; transform: translateY(10px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .shinduk-logo-version {
-            font-size: 0.95rem;
-            color: var(--logo-blue-light);
-            margin-left: 6px;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            align-self: flex-end;
-            padding-bottom: 2px;
-            opacity: 0.95;
-            background: none;
-            user-select: none;
-            position: relative;
-            top: 2px;
-        }
-        .vault-header h1 {
-            display: none;
-        }
-        .vault-auth {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .vault-auth input {
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            color: var(--text-primary);
-            font-size: 1rem;
-            width: 200px;
-            transition: all 0.2s ease;
-        }
-        .vault-auth input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-        .vault-auth .btn { margin-left: 4px; }
-        .btn {
-            padding: 12px 24px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: var(--radius-small);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-light);
-        }
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-        .btn-secondary:hover { background: var(--border-light); }
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #cc2e26; }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            border-radius: 6px;
-        }
-        .btn-icon {
-            padding: 8px 12px;
-            font-size: 1.1rem;
-            border-radius: 6px;
-            min-width: 40px;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn[disabled], .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .vault-content {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-            align-items: start;
-            width: 100%;
-        }
-        .password-management {
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            min-width: 0;
-        }
-        .password-management h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-        .password-actions {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .search-bar {
-            flex: 1;
-            min-width: 180px;
-            padding: 12px 16px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-        .search-bar:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-        .password-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 0;
-        }
-        .password-item {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            padding: 20px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            word-break: break-word;
-        }
-        .password-item:hover {
-            border-color: var(--border-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-light);
-        }
-        .password-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .password-item-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-        .password-item-category {
-            padding: 4px 8px;
-            background: var(--accent);
-            color: white;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .password-item-info {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            word-break: break-word;
-        }
-        .password-actions-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .password-field {
-            flex: 1;
-            padding: 4px 8px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            word-break: break-all;
-        }
-        .password-item-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .password-sidebar {
-            position: sticky;
-            top: 20px;
-            min-width: 0;
-        }
-        .password-entry-form, .settings {
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            min-width: 0;
-        }
-        .password-entry-form h3, .settings h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.2s ease;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-        }
-        .form-control::placeholder { color: var(--text-muted); }
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
-        }
-        textarea.form-control {
-            resize: vertical;
-            min-height: 80px;
-        }
-        .password-strength {
-            margin-top: 8px;
-            height: 4px;
-            background: var(--bg-tertiary);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .password-strength-bar {
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        .strength-weak { background: var(--danger); }
-        .strength-medium { background: var(--warning); }
-        .strength-strong { background: var(--success); }
-        .settings-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-        }
-        .settings-group:last-child { border-bottom: none; }
-        .settings-group label {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .toggle-switch.active { background: var(--accent); }
-        .toggle-switch::before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.2s ease;
-        }
-        .toggle-switch.active::before { transform: translateX(26px); }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            color: var(--text-primary);
-            box-shadow: var(--shadow);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            max-width: 90vw;
-            word-break: break-word;
-        }
-        .notification.show { transform: translateX(0); }
-        .notification.success { border-color: var(--success); }
-        .notification.error { border-color: var(--danger); }
-        .notification.warning { border-color: var(--warning); }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-        .empty-state h3 {
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-        .vault-footer {
-            text-align: center;
-            padding: 16px 0 8px 0;
-            border-top: 1px solid var(--border);
-            margin-top: 32px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            background: none;
-            box-shadow: none;
-            letter-spacing: 0.01em;
-        }
-        .vault-footer p {
+        * {
             margin: 0;
             padding: 0;
-            line-height: 1.4;
+            box-sizing: border-box;
         }
-        .vault-footer a {
-            color: var(--text-muted);
-            text-decoration: underline dotted;
-            transition: color 0.15s;
-            font-weight: 400;
-        }
-        .vault-footer a:hover {
-            color: var(--accent);
-            text-decoration: underline;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            display: none;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ecf0f9;
+            min-height: 100vh;
+            display: flex;
             align-items: center;
             justify-content: center;
+            color: #131a2f;
         }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 32px 28px 24px 28px;
-            min-width: 320px;
-            max-width: 95vw;
-            color: var(--text-primary);
-            position: relative;
-        }
-        .modal h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-        }
-        .modal .form-group { margin-bottom: 16px; }
-        .modal label {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 500;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .modal input[type="password"] {
-            width: 100%;
-            padding: 10px 14px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-small);
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 2px;
-        }
-        .modal input[type="password"]:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.08);
-        }
-        .modal .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .modal .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 14px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
-        .modal .modal-error {
-            color: var(--danger);
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            min-height: 18px;
-        }
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        .popup-overlay.active {
-            display: flex;
-        }
-        .popup {
-            background: var(--bg-secondary);
-            padding: 30px;
-            border-radius: var(--radius);
-            width: 90vw;
-            max-width: 500px;
-            color: white;
+
+        /* Main container */
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 50px;
             text-align: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e8ecf0;
+            max-width: 480px;
+            width: 90%;
             position: relative;
-            min-width: 0;
         }
-        .popup h3 {
-            font-size: 1.35rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+
+        /* Typography */
+        h1 {
+            color: #131a2f;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
-        .popup p {
-            font-size: 1rem;
-            margin-bottom: 20px;
+
+        .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 48px;
+            font-weight: 400;
+            line-height: 1.5;
         }
-        .popup .important-word {
-            color: red;
-            font-weight: bold;
-            text-underline-offset: 3px;
-            text-decoration-thickness: 2px;
+
+        /* Loading animation */
+        .loading {
+            margin-bottom: 40px;
         }
-        .popup-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.2rem;
-            color: white;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        @keyframes jump {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        #export-btn.jumping {
-            animation: jump 0.5s ease-in-out;
-        }
-        .password-eye-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 2;
-            padding: 0 4px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-        }
-        .password-eye-btn:focus {
-            outline: none;
-            color: var(--accent);
-        }
-        .password-input-wrapper {
-            position: relative;
+
+        .loading-bar {
             width: 100%;
+            height: 8px;
+            background: #e8ecf0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
         }
-        .password-eye-icon {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .password-eye-icon svg {
-            width: 100%;
+
+        .loading-progress {
             height: 100%;
-            display: block;
+            background: #131a2f;
+            border-radius: 4px;
+            animation: loading 3s ease-out;
+            position: relative;
         }
-        @media (max-width: 1024px) {
-            .vault-content {
-                grid-template-columns: 1fr 320px;
-                gap: 24px;
-            }
-            .password-sidebar {
-                top: 10px;
-            }
+
+        .loading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 2s ease-in-out infinite;
         }
-        @media (max-width: 900px) {
-            .vault-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .password-sidebar {
-                position: static;
-                width: 100%;
-            }
+
+        @keyframes loading {
+            from { width: 0%; }
+            to { width: 100%; }
         }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loading-text {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Fallback link */
+        .fallback a {
+            color: #131a2f;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 24px;
+            border: 2px solid #131a2f;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .fallback a:hover {
+            background: #131a2f;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .fallback a:active {
+            transform: translateY(0);
+        }
+
+        /* Mobile responsiveness */
         @media (max-width: 768px) {
-            html { font-size: 15px; }
-            .vault-container { padding: 20px 8px; }
-            .vault-header { flex-direction: column; gap: 20px; text-align: center; }
-            .vault-header-logo { justify-content: center; width: 100%; }
-            .vault-auth { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .vault-auth input { width: 100%; min-width: 0; }
-            .vault-content { grid-template-columns: 1fr; gap: 16px; }
-            .password-actions { flex-direction: column; gap: 8px; }
-            .search-bar { min-width: 0; width: 100%; }
-            .password-management,
-            .password-entry-form,
-            .settings { padding: 16px; }
-            .modal { min-width: 90vw; padding: 12px 4px 8px 4px; }
-            .popup { min-width: 90vw; padding: 12px 4px 8px 4px; }
-            #export-btn.jumping {
-                animation: jump 0.6s ease-in-out;
+            .container {
+                padding: 40px 30px;
+                margin: 20px;
             }
-            .vault-footer {
-                padding: 12px 0 6px 0;
-                font-size: 0.8rem;
-                margin-top: 20px;
+
+            h1 {
+                font-size: 24px;
             }
-            .shinduk-logo-version {
-                margin-left: 1px;
-                margin-top: 2px;
-                align-self: flex-end;
-                top: 1px;
+
+            .subtitle {
+                font-size: 14px;
             }
-            .password-item { padding: 12px; }
+
+            .icon {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 24px;
+            }
+
+            .icon svg {
+                width: 24px;
+                height: 24px;
+            }
         }
-        @media (max-width: 480px) {
-            html { font-size: 14px; }
-            .vault-header-logo { flex-direction: column; gap: 2px; }
-            .shinduk-logo-text { font-size: 1.2rem; }
-            .shinduk-logo-version { font-size: 0.5rem; }
-            .vault-header { padding-bottom: 10px; margin-bottom: 20px; }
-            .password-management, .password-entry-form, .settings { padding: 8px; }
-            .modal, .popup { padding: 6px 2px 4px 2px; }
-            .password-item { padding: 8px; }
-            .empty-state { padding: 30px 4px; }
+
+        /* Subtle entrance animation */
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading states */
+        .loading-text {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
 <body>
-    <div class="vault-container">
-        <header class="vault-header">
-            <div class="vault-header-logo">
-                <span class="shinduk-logo-anim">
-                    <span class="shinduk-logo-text">shinduk</span>
-                    <span class="shinduk-logo-version">v1.o</span>
-                </span>
+    <!-- Main content -->
+    <div class="container">
+        <h1>SHINDUK</h1>
+        <p class="subtitle">Redirecting you to a secure environment</p>
+        
+        <div class="loading">
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
             </div>
-            <div class="vault-auth">
-                <input type="password" id="master-password-input" placeholder="Enter Master Key" autocomplete="current-password">
-                <button class="btn btn-secondary" id="clear-master-btn" title="Clear Master Key">Clear</button>
-                <button class="btn btn-icon" id="lock-unlock-btn" title="Lock/Unlock Vault">
-                    <span id="lock-unlock-icon" style="font-size:18px;">🔒</span>
-                </button>
-                <span id="master-status" style="color: var(--text-secondary); font-size: 14px; margin-left: 8px;"></span>
-            </div>
-            <h1>SHINDUK</h1>
-        </header>
-        <div class="vault-content">
-            <section class="password-management">
-                <h2>Password Manager</h2>
-                <div class="password-actions">
-                    <input type="text" class="search-bar" id="search-passwords" placeholder="Search passwords...">
-                    <button class="btn btn-secondary" id="export-btn">Export</button>
-                    <label class="btn btn-secondary" style="margin:0;cursor:pointer;">
-                        Import
-                        <input type="file" id="import-json-input" accept=".json" style="display:none;">
-                    </label>
-                </div>
-                <ul id="password-list" class="password-list"></ul>
-            </section>
-            <div class="password-sidebar">
-                <section class="password-entry-form">
-                    <h3>Add New Password</h3>
-                    <form id="password-form" autocomplete="off">
-                        <div class="form-group">
-                            <label for="service-name">Website/Service Name</label>
-                            <input type="text" id="service-name" class="form-control" placeholder="e.g., GitHub, Netflix" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="username">Username/Email</label>
-                            <input type="text" id="username" class="form-control" placeholder="username@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="password" class="form-control" placeholder="Enter password" required>
-                                <button type="button" id="toggle-password-visibility" class="password-eye-btn" tabindex="-1" aria-label="Show/Hide password">
-                                    <span id="password-eye-icon" class="password-eye-icon">
-                                        <svg id="eye-open-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <ellipse cx="12" cy="12" rx="8" ry="5.5"></ellipse>
-                                            <circle cx="12" cy="12" r="2.5"></circle>
-                                        </svg>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="password-strength">
-                                <div class="password-strength-bar strength-weak" id="strength-bar" style="width: 0%"></div>
-                            </div>
-                            <button type="button" class="btn btn-small" id="generate-btn" style="margin-top: 8px;">Generate Strong Password</button>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Category</label>
-                            <select id="category" class="form-control">
-                                <option value="work">Work</option>
-                                <option value="personal">Personal</option>
-                                <option value="social">Social</option>
-                                <option value="banking">Banking</option>
-                                <option value="entertainment">Entertainment</option>
-                                <option value="shopping">Shopping</option>
-                                <option value="others">Others</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="notes">Notes</label>
-                            <textarea id="notes" class="form-control" placeholder="Additional notes (optional)"></textarea>
-                        </div>
-                        <button type="submit" class="btn" style="width: 100%;">Save Password</button>
-                    </form>
-                </section>
-                <section class="settings">
-                    <h2>Settings</h2>
-                    <div class="settings-group" style="display:none;">
-                        <label>Show Passwords</label>
-                        <div class="toggle-switch" id="show-passwords-toggle"></div>
-                    </div>
-                    <div class="settings-group">
-                        <label>Clear All Data</label>
-                        <button class="btn btn-danger btn-small" id="clear-all-btn">Clear All</button>
-                    </div>
-                    <div class="settings-group">
-                        <label>Change Master Key</label>
-                        <button class="btn btn-secondary btn-small" id="change-master-btn">Change</button>
-                    </div>
-                </section>
-            </div>
+            <div class="loading-text">Establishing secure connection...</div>
         </div>
-        <footer class="vault-footer">
-            <p>
-                Made with vibe coding by 
-                <a href="https://github.com/tariqulislamrahat" target="_blank" rel="noopener noreferrer">Tariqul Islam</a>
-            </p>
-    </div>
-    <div class="popup-overlay" id="popup-overlay">
-        <div class="popup">
-            <button class="popup-close" id="popup-close" title="Close">&times;</button>
-            <h3>Important Security Notice</h3>
-            <p>
-                This is an <span class="important-word">offline vault</span>. Your passwords are <span class="important-word">stored locally</span> in your browser and are <span class="important-word">not saved on any server</span> for your security. No information is sent or stored remotely.
-            </p>
-            <p>
-                For added security, we recommend <span class="important-word">exporting a copy</span> of your passwords after encrypting them.
-            </p>
-            <button class="btn" id="popup-ok-btn">Got It</button>
+        
+        <div class="fallback">
+            <a href="https://studio--shinduk-secure-vault.us-central1.hosted.app/">
+                Continue Manually
+            </a>
         </div>
     </div>
-    <div class="modal-overlay" id="change-master-modal-overlay">
-        <div class="modal" id="change-master-modal">
-            <button class="modal-close" id="close-change-master-modal" title="Close">&times;</button>
-            <h3>Change Master Key</h3>
-            <form id="change-master-form" autocomplete="off">
-                <div class="form-group">
-                    <label for="current-master-password">Current Master Key</label>
-                    <input type="password" id="current-master-password" autocomplete="current-password" required>
-                </div>
-                <div class="form-group">
-                    <label for="new-master-password">New Master Key</label>
-                    <input type="password" id="new-master-password" autocomplete="new-password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm-new-master-password">Confirm New Master Key</label>
-                    <input type="password" id="confirm-new-master-password" autocomplete="new-password" required>
-                </div>
-                <div class="modal-error" id="change-master-error"></div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary btn-small" id="cancel-change-master-btn">Cancel</button>
-                    <button type="submit" class="btn btn-small">Change Key</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="notification" id="notification">
-        <span id="notification-text"></span>
-    </div>
+
     <script>
-function generateRandomId() {
-    return 'id-' + Math.random().toString(36).substr(2, 16) + Date.now();
-}
-function sanitizeInput(str) {
-    if (typeof str !== 'string') return '';
-    return str.replace(/[<>]/g, '');
-}
-function showNotification(message, type = 'success', timeout = 3000) {
-    const notification = document.getElementById('notification');
-    const text = document.getElementById('notification-text');
-    notification.className = 'notification ' + type;
-    text.textContent = message;
-    notification.classList.add('show');
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, timeout);
-}
-async function deriveKey(masterKey, salt) {
-    const enc = new TextEncoder();
-    const keyMaterial = await window.crypto.subtle.importKey(
-        "raw",
-        enc.encode(masterKey),
-        { name: "PBKDF2" },
-        false,
-        ["deriveKey"]
-    );
-    return window.crypto.subtle.deriveKey(
-        {
-            name: "PBKDF2",
-            salt: salt,
-            iterations: 100000,
-            hash: "SHA-256"
-        },
-        keyMaterial,
-        { name: "AES-GCM", length: 256 },
-        false,
-        ["encrypt", "decrypt"]
-    );
-}
-function arrayBufferToBase64(buffer) {
-    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
-}
-function base64ToArrayBuffer(base64) {
-    const binary = atob(base64);
-    const len = binary.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binary.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-async function encryptPassword(password, masterKey) {
-    if (!masterKey.trim()) return null;
-    const enc = new TextEncoder();
-    const salt = window.crypto.getRandomValues(new Uint8Array(16));
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
-    const key = await deriveKey(masterKey, salt);
-    const encrypted = await window.crypto.subtle.encrypt(
-        { name: "AES-GCM", iv: iv },
-        key,
-        enc.encode(password)
-    );
-    return {
-        salt: arrayBufferToBase64(salt),
-        iv: arrayBufferToBase64(iv),
-        ciphertext: arrayBufferToBase64(encrypted)
-    };
-}
-async function decryptPassword(encryptedData, masterKey) {
-    if (!masterKey.trim() || !encryptedData) return "";
-    try {
-        const salt = new Uint8Array(base64ToArrayBuffer(encryptedData.salt));
-        const iv = new Uint8Array(base64ToArrayBuffer(encryptedData.iv));
-        const ciphertext = base64ToArrayBuffer(encryptedData.ciphertext);
-        const key = await deriveKey(masterKey, salt);
-        const decrypted = await window.crypto.subtle.decrypt(
-            { name: "AES-GCM", iv: iv },
-            key,
-            ciphertext
-        );
-        const dec = new TextDecoder();
-        return dec.decode(decrypted);
-    } catch (e) {
-        return "";
-    }
-}
-const VAULT_STORAGE_KEY = 'vault_passwords';
-function getPasswordEntries() {
-    const data = localStorage.getItem(VAULT_STORAGE_KEY);
-    if (!data) return [];
-    try {
-        const arr = JSON.parse(data);
-        if (!Array.isArray(arr)) return [];
-        return arr;
-    } catch (e) {
-        return [];
-    }
-}
-function savePasswordEntries(entries) {
-    localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(entries));
-}
-function savePasswordEntry(entry) {
-    const entries = getPasswordEntries();
-    const idx = entries.findIndex(e => e.id === entry.id);
-    if (idx >= 0) {
-        entries[idx] = entry;
-    } else {
-        entries.push(entry);
-    }
-    savePasswordEntries(entries);
-}
-function deletePasswordEntry(id) {
-    const entries = getPasswordEntries().filter(e => e.id !== id);
-    savePasswordEntries(entries);
-}
-function clearAllData() {
-    localStorage.removeItem(VAULT_STORAGE_KEY);
-}
-let currentMasterKey = null;
-let isUnlocked = false;
-let decryptedCache = [];
-function validateMasterKey(masterKey) {
-    if (!masterKey || typeof masterKey !== 'string' || masterKey.length < 4) {
-        showNotification('Master key must be at least 4 characters.', 'error');
-        return false;
-    }
-    return true;
-}
-function exportPasswords() {
-    const entries = getPasswordEntries();
-    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'vault-passwords.json';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, 100);
-}
-function importPasswords(jsonData) {
-    try {
-        const arr = JSON.parse(jsonData);
-        if (!Array.isArray(arr)) throw new Error('Invalid data');
-        for (const entry of arr) {
-            if (
-                typeof entry.id !== 'string' ||
-                typeof entry.serviceName !== 'string' ||
-                typeof entry.username !== 'string' ||
-                typeof entry.password !== 'object' ||
-                typeof entry.category !== 'string'
-            ) {
-                throw new Error('Invalid entry format');
+        // Enhanced redirect with user feedback
+        let countdown = 3;
+        const loadingText = document.querySelector('.loading-text');
+        const messages = [
+            'Establishing secure connection...',
+            'Verifying security protocols...',
+            'Finalizing redirect...'
+        ];
+
+        const updateMessage = () => {
+            if (countdown > 0) {
+                loadingText.textContent = messages[3 - countdown] || 'Redirecting...';
+                countdown--;
+                setTimeout(updateMessage, 1000);
+            } else {
+                loadingText.textContent = 'Redirecting now...';
+                // Additional fallback redirect
+                setTimeout(() => {
+                    window.location.href = 'https://studio--shinduk-secure-vault.us-central1.hosted.app/';
+                }, 500);
             }
-        }
-        savePasswordEntries(arr);
-        showNotification('Import successful.', 'success');
-        return true;
-    } catch (e) {
-        showNotification('Import failed: ' + e.message, 'error');
-        return false;
-    }
-}
-function clearForm() {
-    document.getElementById('service-name').value = '';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('notes').value = '';
-    document.getElementById('category').selectedIndex = 0;
-    updatePasswordStrength('');
-}
-async function displayPasswordList(filter = '') {
-    const list = document.getElementById('password-list');
-    list.innerHTML = '';
-    let entries = isUnlocked ? decryptedCache : getPasswordEntries();
-    if (filter) {
-        const f = filter.toLowerCase();
-        entries = entries.filter(entry => {
-            return (
-                (entry.serviceName && entry.serviceName.toLowerCase().includes(f)) ||
-                (entry.username && entry.username.toLowerCase().includes(f)) ||
-                (entry.category && entry.category.toLowerCase().includes(f))
-            );
+        };
+
+        // Start countdown
+        updateMessage();
+
+        // Add smooth transition when leaving page
+        window.addEventListener('beforeunload', () => {
+            document.body.style.opacity = '0.7';
         });
-    }
-    if (entries.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'empty-state';
-        empty.innerHTML = '<h3>No Passwords Found</h3><p>Add your first password to get started.</p>';
-        list.appendChild(empty);
-        return;
-    }
-    for (const entry of entries) {
-        const li = document.createElement('li');
-        li.className = 'password-item fade-in';
-        const header = document.createElement('div');
-        header.className = 'password-item-header';
-        const title = document.createElement('span');
-        title.className = 'password-item-title';
-        title.textContent = entry.serviceName || '[No Service Name]';
-        const category = document.createElement('span');
-        category.className = 'password-item-category';
-        category.textContent = entry.category;
-        header.appendChild(title);
-        header.appendChild(category);
-        const info = document.createElement('div');
-        info.className = 'password-item-info';
-        if (isUnlocked) {
-            let decryptedPwd = '';
-            try {
-                decryptedPwd = await decryptPassword(entry.password, currentMasterKey);
-            } catch (e) {
-                decryptedPwd = '[Decryption Error]';
-            }
-            info.innerHTML = `<strong>Username:</strong> ${sanitizeInput(entry.username)}<br>
-                <strong>Password:</strong> <span class="password-field">${decryptedPwd !== "" ? sanitizeInput(decryptedPwd) : '[Decryption Error]'}</span>`;
-            if (entry.notes) {
-                info.innerHTML += `<br><strong>Notes:</strong> ${sanitizeInput(entry.notes)}`;
-            }
-        } else {
-            info.innerHTML = `<strong>Username:</strong> ${sanitizeInput(entry.username)}<br>
-                <strong>Password:</strong> <span class="password-field">********</span>`;
-            if (entry.notes) {
-                info.innerHTML += `<br><strong>Notes:</strong> ${sanitizeInput(entry.notes)}`;
-            }
-        }
-        const actions = document.createElement('div');
-        actions.className = 'password-item-actions';
-        const delBtn = document.createElement('button');
-        delBtn.className = 'btn btn-danger btn-small';
-        delBtn.textContent = 'Delete';
-        delBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (confirm('Delete this password?')) {
-                deletePasswordEntry(entry.id);
-                if (isUnlocked) {
-                    decryptedCache = decryptedCache.filter(e => e.id !== entry.id);
-                }
-                displayPasswordList(document.getElementById('search-passwords').value);
-                showNotification('Password deleted.', 'success');
-            }
-        });
-        actions.appendChild(delBtn);
-        li.appendChild(header);
-        li.appendChild(info);
-        li.appendChild(actions);
-        list.appendChild(li);
-    }
-}
-function updateUIState() {
-    const masterInput = document.getElementById('master-password-input');
-    const lockUnlockBtn = document.getElementById('lock-unlock-btn');
-    const lockUnlockIcon = document.getElementById('lock-unlock-icon');
-    const status = document.getElementById('master-status');
-    if (isUnlocked) {
-        masterInput.disabled = true;
-        lockUnlockBtn.disabled = false;
-        lockUnlockIcon.textContent = '🔓';
-        lockUnlockBtn.title = 'Lock Vault';
-        status.textContent = 'Unlocked';
-        status.style.color = 'var(--success)';
-    } else {
-        masterInput.disabled = false;
-        lockUnlockBtn.disabled = false;
-        lockUnlockIcon.textContent = '🔒';
-        lockUnlockBtn.title = 'Unlock Vault';
-        status.textContent = 'Locked';
-        status.style.color = 'var(--text-secondary)';
-    }
-}
-function updatePasswordStrength(password) {
-    const bar = document.getElementById('strength-bar');
-    let score = 0;
-    if (password.length >= 12) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[a-z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-    let width = Math.min(100, score * 20);
-    bar.style.width = width + '%';
-    bar.className = 'password-strength-bar';
-    if (score <= 2) bar.classList.add('strength-weak');
-    else if (score === 3 || score === 4) bar.classList.add('strength-medium');
-    else bar.classList.add('strength-strong');
-}
-document.getElementById('lock-unlock-btn').addEventListener('click', async function handleLockUnlock() {
-    const masterInput = document.getElementById('master-password-input');
-    const masterKey = masterInput.value;
-    if (!masterKey) {
-        showNotification('Please enter your master key.', 'error');
-        return;
-    }
-    if (!isUnlocked) {
-        if (!validateMasterKey(masterKey)) {
-            isUnlocked = false;
-            decryptedCache = [];
-            await displayPasswordList(document.getElementById('search-passwords').value);
-            updateUIState();
-            return;
-        }
-        isUnlocked = true;
-        currentMasterKey = masterKey;
-        decryptedCache = getPasswordEntries().map(entry => ({ ...entry }));
-        await displayPasswordList(document.getElementById('search-passwords').value);
-        updateUIState();
-        showNotification('Vault unlocked.', 'success');
-    } else {
-        isUnlocked = false;
-        decryptedCache = [];
-        currentMasterKey = null;
-        document.getElementById('master-password-input').value = '';
-        await displayPasswordList(document.getElementById('search-passwords').value);
-        updateUIState();
-        showNotification('Vault locked.', 'success');
-    }
-});
-document.getElementById('clear-master-btn').addEventListener('click', function () {
-    document.getElementById('master-password-input').value = '';
-    document.getElementById('master-password-input').focus();
-});
-document.getElementById('password-form').addEventListener('submit', async function handleAddPassword(e) {
-    e.preventDefault();
-    if (!isUnlocked || !currentMasterKey) {
-        showNotification('Unlock the vault first.', 'error');
-        return;
-    }
-    const serviceName = sanitizeInput(document.getElementById('service-name').value.trim());
-    const username = sanitizeInput(document.getElementById('username').value.trim());
-    const password = document.getElementById('password').value;
-    const notes = sanitizeInput(document.getElementById('notes').value.trim());
-    const category = document.getElementById('category').value;
-    if (!serviceName || !username || !password) {
-        showNotification('All fields except notes are required.', 'error');
-        return;
-    }
-    const encryptedPassword = await encryptPassword(password, currentMasterKey);
-    const entry = {
-        id: generateRandomId(),
-        serviceName,
-        username,
-        password: encryptedPassword,
-        notes,
-        category,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-    };
-    savePasswordEntry(entry);
-    decryptedCache.push(entry);
-    clearForm();
-    await displayPasswordList(document.getElementById('search-passwords').value);
-    showNotification('Password saved.', 'success');
-});
-document.getElementById('search-passwords').addEventListener('input', function handleSearch(e) {
-    displayPasswordList(e.target.value);
-});
-document.getElementById('export-btn').addEventListener('click', function handleExport() {
-    exportPasswords();
-    showNotification('Exported encrypted passwords.', 'success');
-});
-document.getElementById('import-json-input').addEventListener('change', function handleImport(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-        const success = importPasswords(evt.target.result);
-        if (success) {
-            if (isUnlocked && currentMasterKey) {
-                decryptedCache = getPasswordEntries().map(entry => ({ ...entry }));
-            }
-            displayPasswordList(document.getElementById('search-passwords').value);
-        }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-});
-document.getElementById('change-master-btn').addEventListener('click', function handleChangeMaster() {
-    document.getElementById('change-master-modal-overlay').classList.add('active');
-    document.getElementById('change-master-error').textContent = '';
-    document.getElementById('current-master-password').value = '';
-    document.getElementById('new-master-password').value = '';
-    document.getElementById('confirm-new-master-password').value = '';
-});
-document.getElementById('close-change-master-modal').addEventListener('click', function () {
-    document.getElementById('change-master-modal-overlay').classList.remove('active');
-});
-document.getElementById('cancel-change-master-btn').addEventListener('click', function () {
-    document.getElementById('change-master-modal-overlay').classList.remove('active');
-});
-document.getElementById('change-master-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const currentKey = document.getElementById('current-master-password').value;
-    const newKey = document.getElementById('new-master-password').value;
-    const confirmKey = document.getElementById('confirm-new-master-password').value;
-    const errorDiv = document.getElementById('change-master-error');
-    errorDiv.textContent = '';
-    if (!currentKey || !newKey || !confirmKey) {
-        errorDiv.textContent = 'All fields are required.';
-        return;
-    }
-    if (newKey !== confirmKey) {
-        errorDiv.textContent = 'New master keys do not match.';
-        return;
-    }
-    if (newKey.length < 4) {
-        errorDiv.textContent = 'New master key must be at least 4 characters.';
-        return;
-    }
-    errorDiv.textContent = 'Re-encrypting...';
-    const entries = getPasswordEntries();
-    const decryptedEntries = [];
-    for (const entry of entries) {
-        const decryptedPwd = await decryptPassword(entry.password, currentKey);
-        if (decryptedPwd === "") {
-            errorDiv.textContent = 'Failed to decrypt with current master key.';
-            return;
-        }
-        decryptedEntries.push({
-            ...entry,
-            password: decryptedPwd
-        });
-    }
-    const reEncryptedEntries = [];
-    for (const entry of decryptedEntries) {
-        const encryptedPassword = await encryptPassword(entry.password, newKey);
-        reEncryptedEntries.push({
-            ...entry,
-            password: encryptedPassword
-        });
-    }
-    savePasswordEntries(reEncryptedEntries);
-    isUnlocked = true;
-    currentMasterKey = newKey;
-    decryptedCache = reEncryptedEntries.map(entry => ({ ...entry }));
-    await displayPasswordList(document.getElementById('search-passwords').value);
-    updateUIState();
-    document.getElementById('change-master-modal-overlay').classList.remove('active');
-    showNotification('Master key changed.', 'success');
-});
-document.getElementById('clear-all-btn').addEventListener('click', function handleClearAll() {
-    if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
-        clearAllData();
-        decryptedCache = [];
-        displayPasswordList(document.getElementById('search-passwords').value);
-        showNotification('All data cleared.', 'success');
-    }
-});
-document.getElementById('generate-btn').addEventListener('click', function () {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{};:,.<>?';
-    let pwd = '';
-    for (let i = 0; i < 18; i++) {
-        pwd += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    document.getElementById('password').value = pwd;
-    updatePasswordStrength(pwd);
-});
-document.getElementById('password').addEventListener('input', function (e) {
-    updatePasswordStrength(e.target.value);
-});
-document.getElementById('toggle-password-visibility').addEventListener('click', function (e) {
-    e.preventDefault();
-    const pwdInput = document.getElementById('password');
-    const eyeIcon = document.getElementById('password-eye-icon');
-    if (pwdInput.type === 'password') {
-        pwdInput.type = 'text';
-        eyeIcon.innerHTML = `
-            <svg id="eye-closed-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <ellipse cx="12" cy="12" rx="8" ry="5.5"></ellipse>
-                <path d="M4 4l16 16" stroke="currentColor" stroke-width="2"/>
-            </svg>
-        `;
-    } else {
-        pwdInput.type = 'password';
-        eyeIcon.innerHTML = `
-            <svg id="eye-open-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <ellipse cx="12" cy="12" rx="8" ry="5.5"></ellipse>
-                <circle cx="12" cy="12" r="2.5"></circle>
-            </svg>
-        `;
-    }
-});
-document.getElementById('password-eye-icon').innerHTML = `
-    <svg id="eye-open-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="12" cy="12" rx="8" ry="5.5"></ellipse>
-        <circle cx="12" cy="12" r="2.5"></circle>
-    </svg>
-`;
-window.addEventListener('DOMContentLoaded', function () {
-    isUnlocked = false;
-    decryptedCache = [];
-    displayPasswordList('');
-    updateUIState();
-    clearForm();
-    const showToggle = document.getElementById('show-passwords-toggle');
-    if (showToggle) showToggle.parentElement.style.display = 'none';
-    const popupOverlay = document.getElementById('popup-overlay');
-    const popupOkBtn = document.getElementById('popup-ok-btn');
-    const popupCloseBtn = document.getElementById('popup-close');
-    const exportBtn = document.getElementById('export-btn');
-    const isPopupShown = localStorage.getItem('vaultPopupShown');
-    if (!isPopupShown) {
-        popupOverlay.classList.add('active');
-        localStorage.setItem('vaultPopupShown', 'true');
-        if (exportBtn) {
-            exportBtn.classList.add('jumping');
-            setTimeout(function () {
-                exportBtn.classList.remove('jumping');
-            }, 600);
-        }
-    }
-    if (popupOkBtn) {
-        popupOkBtn.addEventListener('click', function () {
-            popupOverlay.classList.remove('active');
-        });
-    }
-    if (popupCloseBtn) {
-        popupCloseBtn.addEventListener('click', function () {
-            popupOverlay.classList.remove('active');
-        });
-    }
-});
     </script>
 </body>
 </html>
